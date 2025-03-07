@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <script type="module" src="index.js" defer></script>
+    <title>Kanban Board</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Kanban Board</h1>
+        <div class="main-header">
+            <button class="add-board">&plus; Add Board</button>
+            <dialog class="add-board-modal">
+                <h2>Add Board</h2>
+                <form>
+                    <div>
+                        <label for="field-board-heading">Enter Heading</label>
+                        <input type="text" id="field-board-heading">
+                    </div>
+                    <div>
+                        <label for="field-board-color">Choose Color</label>
+                        <input type="color" name="field-board-color" id="field-board-color">
+                    </div>
+                    <div>
+                        <button type="submit">Submit</button>
+                        <button type="submit" formmethod="dialog">Cancel</button>
+                    </div>
+                </form>
+            </dialog>
+
+            <div class="unplanned-section">
+                <div class="view-container">
+                    <span id="upValue">0</span>
+                    <img src="/assets/database.svg" class="view-unplanned">
+                </div>
+                <dialog class="view-unplanned-modal">
+                    <h2>Unplanned Tasks</h2>
+                    <ul>
+                        <!-- <li>Unplanned 1</li>
+                        <li>Unplanned 2</li> -->
+                    </ul>
+                </dialog>
+                <button class="add-unplanned">&plus; Unplanned Task</button>
+                <dialog class="add-unplanned-task-modal">
+                    <h2>Add Unplanned Task</h2>
+                    <form>
+                        <div>
+                            <label for="field-uptask-desc">Enter Description</label>
+                            <input type="text" id="field-uptask-desc">
+                        </div>
+                        <div>
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </dialog>
+            </div>
+        </div>
+
+        <div class="boards">
+            <div class="to-do board">
+                <div class="board-header bulk-enabled">
+                    <h2>To Do</h2>
+                    <img src="/assets/trash.svg" class="icon bulk-delete">
+                </div>
+
+                <button class="add-task">&plus; Add Task</button>
+                <dialog class="add-task-modal">
+                    <h2>Add Task</h2>
+                    <form>
+                        <div>
+                            <label>Enter Heading</label>
+                            <input type="text" class="field-task-heading">
+                        </div>
+                        <div>
+                            <label>Enter Description</label>
+                            <input type="text" class="field-task-desc">
+                        </div>
+                        <div class="set-priority">
+                            <div>Choose Priority</div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p1" value="1"
+                                    checked>
+                                <label>High</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p2" value="2">
+                                <label>Medium</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p3" value="3">
+                                <label>Low</label>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </dialog>
+
+                <div class="board-helper-info">
+                    <div>
+                        <span class="circle"></span>
+                        Tasks: <span class="t-count">1</span>
+                    </div>
+
+                    <div>Sort By: <span class="p-filter">Priority</span></div>
+                </div>
+
+                <template class="task-template">
+                    <section class="accordion" draggable="true">
+                        <div class="task">
+
+                            <div class="task-text-info">
+                                <div class="task-header">
+                                    <div class="left-actions">
+                                        <input type="checkbox" class="bulk-check">
+                                        <span><img src="/assets/expand.svg"
+                                                class="icon accordion-icon expand-task"></span>
+                                    </div>
+                                    <div class="task-header-headings">
+                                        <h4 class="task-title"></h4>
+                                        <h4 style="color:rgb(255, 166, 0);">Priority: <span
+                                                class="task-priority">High</span></h4>
+                                    </div>
+                                    <div class="right-actions">
+                                        <img src="/assets/add.svg" class="icon add-story">
+                                        <img src="/assets/edit.svg" class="icon edit-task">
+                                        <img src="/assets/trash.svg" class="icon delete-task">
+                                    </div>
+                                </div>
+                                <p class="task-description"></p>
+                                <p class="time-of-task"></p>
+                            </div>
+
+                            <dialog class="add-story-modal">
+                                <h2>Add Story</h2>
+                                <form method="dialog">
+                                    <div>
+                                        <label>Enter Description</label>
+                                        <input type="text" class="field-story-desc">
+                                    </div>
+                                    <button type="submit">Submit</button>
+                                </form>
+                            </dialog>
+
+                            <dialog class="edit-task-modal">
+                                <h2>Edit Task</h2>
+                                <form>
+                                    <div>
+                                        <label>Enter Heading</label>
+                                        <input type="text" class="field-task-heading">
+                                    </div>
+                                    <div>
+                                        <label>Enter Description</label>
+                                        <input type="text" class="field-task-desc">
+                                    </div>
+                                    <div class="set-priority">
+                                        <div>Choose Priority</div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p1" value="1" checked>
+                                            <label>High</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p2" value="2">
+                                            <label>Medium</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p3" value="3">
+                                            <label>Low</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit">Save</button>
+                                    </div>
+                                </form>
+                            </dialog>
+
+                        </div>
+
+                        <div class="stories hide">
+                            <template class="story-template">
+                                <div class="story" draggable="true">
+                                    <p class="story-desc"></p>
+                                    <div class="right-actions"><img src="/assets/trash.svg" class="icon delete-story">
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+            </div>
+
+            <div class="in-progress board">
+                <div class="board-header bulk-enabled">
+                    <h2>IN PROGRESS</h2>
+                    <img src="/assets/trash.svg" class="icon bulk-delete">
+                </div>
+
+                <button class="add-task">&plus; Add Task</button>
+                <dialog class="add-task-modal">
+                    <h2>Add Task</h2>
+                    <form>
+                        <div>
+                            <label>Enter Heading</label>
+                            <input type="text" class="field-task-heading">
+                        </div>
+                        <div>
+                            <label>Enter Description</label>
+                            <input type="text" class="field-task-desc">
+                        </div>
+                        <div class="set-priority">
+                            <div>Choose Priority</div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p1" value="1"
+                                    checked>
+                                <label>High</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p2" value="2">
+                                <label>Medium</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p3" value="3">
+                                <label>Low</label>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </dialog>
+
+                <div class="board-helper-info">
+                    <div>
+                        <span class="circle"></span>
+                        Tasks: <span class="t-count">1</span>
+                    </div>
+
+                    <div>Sort By: <span class="p-filter">Priority</span></div>
+                </div>
+
+                <template class="task-template">
+                    <section class="accordion" draggable="true">
+                        <div class="task">
+
+                            <div class="task-text-info">
+                                <div class="task-header">
+                                    <div class="left-actions">
+                                        <input type="checkbox" class="bulk-check">
+                                        <span><img src="/assets/expand.svg"
+                                                class="icon accordion-icon expand-task"></span>
+                                    </div>
+                                    <div class="task-header-headings">
+                                        <h4 class="task-title"></h4>
+                                        <h4 style="color:rgb(255, 166, 0);">Priority: <span
+                                                class="task-priority">High</span></h4>
+                                    </div>
+                                    <div class="right-actions">
+                                        <img src="/assets/add.svg" class="icon add-story">
+                                        <img src="/assets/edit.svg" class="icon edit-task">
+                                        <img src="/assets/trash.svg" class="icon delete-task">
+                                    </div>
+                                </div>
+                                <p class="task-description"></p>
+                                <p class="time-of-task"></p>
+                            </div>
+
+                            <dialog class="add-story-modal">
+                                <h2>Add Story</h2>
+                                <form method="dialog">
+                                    <div>
+                                        <label>Enter Description</label>
+                                        <input type="text" class="field-story-desc">
+                                    </div>
+                                    <button type="submit">Submit</button>
+                                </form>
+                            </dialog>
+
+                            <dialog class="edit-task-modal">
+                                <h2>Edit Task</h2>
+                                <form>
+                                    <div>
+                                        <label>Enter Heading</label>
+                                        <input type="text" class="field-task-heading">
+                                    </div>
+                                    <div>
+                                        <label>Enter Description</label>
+                                        <input type="text" class="field-task-desc">
+                                    </div>
+                                    <div class="set-priority">
+                                        <div>Choose Priority</div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p1" value="1" checked>
+                                            <label>High</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p2" value="2">
+                                            <label>Medium</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p3" value="3">
+                                            <label>Low</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit">Save</button>
+                                    </div>
+                                </form>
+                            </dialog>
+
+                        </div>
+
+                        <div class="stories hide">
+                            <template class="story-template">
+                                <div class="story" draggable="true">
+                                    <p class="story-desc"></p>
+                                    <div class="right-actions"><img src="/assets/trash.svg" class="icon delete-story">
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+            </div>
+
+            <div class="completed board">
+                <div class="board-header bulk-enabled">
+                    <h2>COMPLETED</h2>
+                    <img src="/assets/trash.svg" class="icon bulk-delete">
+                </div>
+
+                <button class="add-task">&plus; Add Task</button>
+                <dialog class="add-task-modal">
+                    <h2>Add Task</h2>
+                    <form>
+                        <div>
+                            <label>Enter Heading</label>
+                            <input type="text" class="field-task-heading">
+                        </div>
+                        <div>
+                            <label>Enter Description</label>
+                            <input type="text" class="field-task-desc">
+                        </div>
+                        <div class="set-priority">
+                            <div>Choose Priority</div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p1" value="1"
+                                    checked>
+                                <label>High</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p2" value="2">
+                                <label>Medium</label>
+                            </div>
+                            <div>
+                                <input type="radio" name="field-task-priority" class="field-task-priority p3" value="3">
+                                <label>Low</label>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit">Submit</button>
+                        </div>
+                    </form>
+                </dialog>
+
+                <div class="board-helper-info">
+                    <div>
+                        <span class="circle"></span>
+                        Tasks: <span class="t-count">1</span>
+                    </div>
+
+                    <div>Sort By: <span class="p-filter">Priority</span></div>
+                </div>
+
+                <template class="task-template">
+                    <section class="accordion" draggable="true">
+                        <div class="task">
+
+                            <div class="task-text-info">
+                                <div class="task-header">
+                                    <div class="left-actions">
+                                        <input type="checkbox" class="bulk-check">
+                                        <span><img src="/assets/expand.svg"
+                                                class="icon accordion-icon expand-task"></span>
+                                    </div>
+                                    <div class="task-header-headings">
+                                        <h4 class="task-title"></h4>
+                                        <h4 style="color:rgb(255, 166, 0);">Priority: <span
+                                                class="task-priority">High</span></h4>
+                                    </div>
+                                    <div class="right-actions">
+                                        <img src="/assets/add.svg" class="icon add-story">
+                                        <img src="/assets/edit.svg" class="icon edit-task">
+                                        <img src="/assets/trash.svg" class="icon delete-task">
+                                    </div>
+                                </div>
+                                <p class="task-description"></p>
+                                <p class="time-of-task"></p>
+                            </div>
+
+                            <dialog class="add-story-modal">
+                                <h2>Add Story</h2>
+                                <form method="dialog">
+                                    <div>
+                                        <label>Enter Description</label>
+                                        <input type="text" class="field-story-desc">
+                                    </div>
+                                    <button type="submit">Submit</button>
+                                </form>
+                            </dialog>
+
+                            <dialog class="edit-task-modal">
+                                <h2>Edit Task</h2>
+                                <form>
+                                    <div>
+                                        <label>Enter Heading</label>
+                                        <input type="text" class="field-task-heading">
+                                    </div>
+                                    <div>
+                                        <label>Enter Description</label>
+                                        <input type="text" class="field-task-desc">
+                                    </div>
+                                    <div class="set-priority">
+                                        <div>Choose Priority</div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p1" value="1" checked>
+                                            <label>High</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p2" value="2">
+                                            <label>Medium</label>
+                                        </div>
+                                        <div>
+                                            <input type="radio" name="field-task-priority"
+                                                class="field-task-priority p3" value="3">
+                                            <label>Low</label>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <button type="submit">Save</button>
+                                    </div>
+                                </form>
+                            </dialog>
+
+                        </div>
+
+                        <div class="stories hide">
+                            <template class="story-template">
+                                <div class="story" draggable="true">
+                                    <p class="story-desc"></p>
+                                    <div class="right-actions"><img src="/assets/trash.svg" class="icon delete-story">
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </section>
+                </template>
+
+            </div>
+
+        </div>
+    </div>
+    </div>
+</body>
+
+</html>
