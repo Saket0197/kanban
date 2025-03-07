@@ -28,3 +28,4 @@
 - **DISPLAY** Total Count of Task(s) in the Board When one or more Tasks are Added or Deleted or Dragged to Other Boards
 - **SORT** tasks by priority
 - **CLEAR** Unplanned tasks once they are planned(categorized to any board)
+- **RESPONSIVENESS**
