@@ -1,10 +1,10 @@
 export const icons = {
-    addIcon: '/assets/add.svg',
-    collapseIcon: '/assets/collapse.svg',
-    dbIcon: '/assets/database.svg',
-    editIcon: '/assets/edit.svg',
-    expandIcon: '/assets/expand.svg',
-    trashIcon: '/assets/trash.svg',
+    addIcon: './assets/add.svg',
+    collapseIcon: './assets/collapse.svg',
+    dbIcon: './assets/database.svg',
+    editIcon: './assets/edit.svg',
+    expandIcon: './assets/expand.svg',
+    trashIcon: './assets/trash.svg',
 };
 
 export const priorityDetails = [{'value':1,'priority':'High',color:'#f00'},
