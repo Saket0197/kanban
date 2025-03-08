@@ -118,6 +118,7 @@ dialog form button{
 
 .boards {
     display: flex;
+    flex-wrap: wrap;
 }
 
 .board-header.bulk-enabled{

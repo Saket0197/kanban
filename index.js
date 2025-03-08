@@ -32,7 +32,7 @@ const bulkDeleteBtns = document.querySelectorAll('.bulk-delete');
 
 function bulkDelete(btn) {
     const currentBoard = btn.closest('.board');
-    btn.addEventListener('click',() => {
+    btn.addEventListener('click',(e) => {
         const checkedBtns = [...currentBoard.querySelectorAll('.bulk-check')].filter(checkbox => checkbox.checked == true);
         if(!checkedBtns.length) {
             alert('No tasks selected for Deletion');
@@ -136,9 +136,57 @@ addBoard.addEventListener('click',() => {
     boardModal.showModal();
 });
 
+const boardSubmitBtn = boardModal.querySelector('button');
+const modalFieldTitle = boardModal.querySelector('#field-board-heading');
+const modalFieldColor = boardModal.querySelector('#field-board-color');
+    
+boardSubmitBtn.addEventListener('click',(e) => {
+    e.preventDefault();
+    const formData = {
+        boardTitle: modalFieldTitle.value.trim(),
+        boardColor: modalFieldColor.value,
+    }
+    boardModal.close(JSON.stringify(formData));
+    modalFieldTitle.value = "";
+    modalFieldColor.value = "#fab701";
+});
+    
+boardModal.addEventListener('close',() => {
+    try{
+        const {boardTitle:fieldTitle,boardColor} = JSON.parse(boardModal.returnValue);
+        if(fieldTitle.length == 0) {
+            alert('Field Should NoT be empty');
+            return;
+        }
+        
+        const boardsContainer = boardModal.closest('.container').querySelector('.boards');
+        const boardTemplate  = document.querySelector('.board-template');
+        const boardNode = boardTemplate.content.cloneNode(true);
+        const boardTitle = boardNode.querySelector('.board-title');
+        const circle = boardNode.querySelector('.circle');
+        boardTitle.innerText = fieldTitle;
+        boardTitle.style.color = boardColor;
+        circle.style.borderColor = boardColor;
+        boardsContainer.appendChild(boardNode);
+        
+        // ADD Task, ADD Task Modal, Bulk-Delete, Priority Filter, onHover
+        const newlyAddedBoard = boardsContainer.lastElementChild;
+        const thisBoardAddTask = newlyAddedBoard.querySelector('.add-task');
+        const thisBoardBulkDelete = newlyAddedBoard.querySelector('.bulk-delete');
+        const thisBoardAddTaskModal = newlyAddedBoard.querySelector('.add-task-modal');
+        addNewTask(thisBoardAddTask);
+        bulkDelete(thisBoardBulkDelete);
+        hoverBoards(newlyAddedBoard);
+        closeOverlay(thisBoardAddTaskModal);
+    }
+    catch(e) {
+        console.log('Changes not saved');
+    }
+});
+
 // ADD UNPLANNED-TASK BUTTON
 
-addUnplanned.addEventListener('click',() => {
+addUnplanned.addEventListener('click',(e) => {
     unplannedTaskModal.showModal();
 });
 
@@ -174,7 +222,7 @@ function init() {
     updateUpTasks();
 }
 
-viewUnplanned.addEventListener('click',() => {
+viewUnplanned.addEventListener('click',(e) => {
     viewUnplannedModal.showModal();
 });
 
@@ -208,7 +256,7 @@ function addNewTask(addBtn) {
     const addTaskModal = addBtn.closest('.board').querySelector('.add-task-modal');
     const {submitBtn,modalTitleField,modalDescField,modalPriorityFields} = getModalForm(addTaskModal);
 
-    addBtn.addEventListener('click',() => {
+    addBtn.addEventListener('click',(e) => {
         addTaskModal.showModal();
     });
     
@@ -228,7 +276,7 @@ function addNewTask(addBtn) {
         try{
             // VALIDATE FORM DATA
             const {taskTitle,taskDesc,taskPriority} = JSON.parse(addTaskModal.returnValue);
-            if(taskTitle == 0 || taskDesc == 0) {
+            if(taskTitle.length == 0 || taskDesc.length == 0) {
                 alert("Fields should not be empty");
                 return;
             }
@@ -254,7 +302,6 @@ function addNewTask(addBtn) {
             const thisTaskDeleteBtn = newlyAddedTask.querySelector('.delete-task');
             const thisTaskStoryContainer = newlyAddedTask.querySelector('.stories');
             const thisTaskModals = [newlyAddedTask.querySelector('.add-story-modal'),newlyAddedTask.querySelector('.edit-task-modal')];
-            const thisTaskCheckBox = newlyAddedTask.querySelector('.bulk-check');
 
             expandcollapse(thisTaskAccIcon);
             editTask(thisTaskEditBtn);
@@ -314,7 +361,7 @@ function editTask(editBtn) {
     const currentEditModal = editBtn.closest('.task').querySelector('.edit-task-modal');
     const {submitBtn:saveBtn, modalTitleField, modalDescField, modalPriorityFields} = getModalForm(currentEditModal);
 
-    editBtn.addEventListener('click',() => {
+    editBtn.addEventListener('click',(e) => {
         modalTitleField.value = uiTitle.innerText;
         modalDescField.value = uiDesc.innerText;
         const myMap = priorityDetails.reduce((acc,p)=>{
@@ -338,7 +385,7 @@ function editTask(editBtn) {
     currentEditModal.addEventListener('close',() => {
         try{
             const {taskTitle,taskDesc,taskPriority} = JSON.parse(currentEditModal.returnValue);
-            if(taskTitle == 0 || taskDesc == 0) {
+            if(taskTitle.length == 0 || taskDesc.length == 0) {
                 alert("Fields should not be empty");
                 return;
             }
@@ -370,7 +417,7 @@ function addTaskStory(addBtn) {
     const currentAddStoryModal = addBtn.closest('.task').querySelector('.add-story-modal');
     const submitBtn = currentAddStoryModal.querySelector('button');
 
-    addBtn.addEventListener('click',() => {
+    addBtn.addEventListener('click',(e) => {
         currentAddStoryModal.showModal();
     });
 
@@ -394,7 +441,7 @@ function addTaskStory(addBtn) {
 
         const newlyAddedStory = stories.lastElementChild;
         const deleteIcon = newlyAddedStory.querySelector('.delete-story');
-        deleteIcon.addEventListener('click',() => {
+        deleteIcon.addEventListener('click',(e) => {
             const currentStoryContainer = deleteIcon.closest('.stories');
             const currentStory = deleteIcon.closest('.story');
             currentStoryContainer.removeChild(currentStory);
@@ -422,7 +469,7 @@ function collapseBoardTask(icon) {
 }
 
 function expandcollapse(icon) {
-    icon.addEventListener('click',() => {
+    icon.addEventListener('click',(e) => {
         if(icon.classList.contains('collapse-task')) {
             icon.classList.remove('collapse-task');
             icon.classList.add('expand-task');
@@ -446,7 +493,7 @@ accordionIcons.forEach(icon => {
 // DELETE TASKS
 
 function deleteTask(deleteBtn) {
-    deleteBtn.addEventListener('click',() => {
+    deleteBtn.addEventListener('click',(e) => {
         const parentBoard = deleteBtn.closest('.board');
         const deleteTask = deleteBtn.closest('.accordion');
         parentBoard.removeChild(deleteTask);
