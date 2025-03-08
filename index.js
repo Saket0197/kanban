@@ -228,12 +228,13 @@ viewUnplanned.addEventListener('click',(e) => {
 
 // ADD TASK BUTTON(S)
 
-function twelveHourFormat(hour,minutes,seconds) {
-    let ampm = hour > 12 ? 'pm' : 'am';
+function twelveHourFormat(hour,minutes) {
+    let ampm = hour < 12 ? 'am' : 'pm';
+    hour = hour % 12;
     hour = hour ? hour : 12;
     minutes = minutes < 10 ? `0${minutes}` : minutes;
-    seconds = seconds < 10 ? `0${seconds}` : seconds;
-    return `${hour}:${minutes}:${seconds} ${ampm}`;
+    // seconds = seconds < 10 ? `0${seconds}` : seconds;
+    return `${hour}:${minutes}: ${ampm}`;
 }
 
 function getTaskDate() {
@@ -243,8 +244,8 @@ function getTaskDate() {
     let year = date.getFullYear();
     let hour = date.getHours();
     let minutes = date.getMinutes();
-    let seconds = date.getSeconds();
-    let timeFormat = twelveHourFormat(hour,minutes,seconds);
+    // let seconds = date.getSeconds();
+    let timeFormat = twelveHourFormat(hour,minutes);
     let weekDay = weekDays[date.getDay()];
 
     let taskDate = `${dayOfMonth}th ${month} ${year} @ ${timeFormat} - ${weekDay}`;
